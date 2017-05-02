@@ -1,0 +1,45 @@
+Test Cases - can be updated when needed
+
+Motor:
+
+  Move forward
+  Move forward/left
+  Move forward/right
+  Stop
+  Reverse
+  Turn 90 on the spot left
+  Turn 90 on the spot right
+
+
+Gate:
+
+  Send signal
+  Open gate 
+  Pass gate before closes
+
+
+Camera:
+
+  Detects white tape (path)
+  Turns right when needed
+  Turns left when needed
+  Stops when tape ends
+  Goes straight when given the option
+  Correctly detects red tape
+  Finds way through tape maze correctly~
+
+
+Sensor:
+
+  Correctly transfers to sensor when red tape is detected
+  Detects distance correctly
+  Stops when very close to a wall
+  Turns with sensor on correctly
+  Starts when no object in front is detected
+  Find way through maze correctly~
+
+
+Shape:
+
+  Wheel size works with size/weight
+  Can turn on corners
