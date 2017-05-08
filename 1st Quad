@@ -1,6 +1,8 @@
 # include <stdio.h>
 # include <time.h>
 # include "E101.h"
+
+//main robot 
 class robot_Main{
 	int quad = 0;
 	if( quad == 0 ){
