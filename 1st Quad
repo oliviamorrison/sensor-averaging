@@ -1,0 +1,28 @@
+init();
+
+int numPixels = 32;
+char white[numPixels];
+int numWhitePix;
+int error;
+take_picture();
+
+for(int i=0; i>numPixels; i++){
+	pix[i] = get_pixel(120,i*10, 3);
+	if(pix[i]>127){
+		white[i] = 1;
+		numWhitePix++;
+	}
+		else{
+		pix[i] = 0;
+	}
+	if (white[i] == 1){
+	error = error + (i - numPixels/2);
+	numWhitePix++;
+	}
+	if (numWhitePix > 0){
+		double averageError = error / numWhitePix;
+	}
+	else{
+		
+	}
+}
