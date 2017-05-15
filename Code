@@ -1,0 +1,64 @@
+# include <stdio.h>
+# include <time.h>
+# include "E101.h"
+
+//class
+class robot_Main{
+
+	int quad = 0;
+	if( quad == 0 ){
+		robot_Main::firstQuad();
+	}
+	
+	//method
+	int firstQuad(){
+	
+		init();
+		int numPixels = 32;
+		char white[numPixels];
+		int numWhitePix;
+		int error;
+		take_picture();
+
+		for(int i=0; i>numPixels; i++){
+			pix[i] = get_pixel(120,i*10, 3);
+			if(pix[i]>127){
+				white[i] = 1;
+				numWhitePix++;
+			}
+				else{
+				pix[i] = 0;
+			}
+			if (white[i] == 1){
+			error = error + (i - numPixels/2);
+			numWhitePix++;
+			}
+		}
+		if (numWhitePix > 0){
+				double averageError = error / numWhitePix;
+				robot_Main::motorForward();
+		}
+		else if(numWhitePix == numPixels){
+			
+		}
+		else{
+			robot_Main::motorBackwards();
+		}
+	}
+	
+	//method
+	int motorForward(){
+		set_motor(1, 80 + error);
+		set_motor(2, -80 + error);
+		sleep1(1,0);
+		set_motor(1, 0);
+		set_motor(2, 0);
+	}
+	
+	//method
+	int motorBackwards(){
+		set_motor(1, -40);
+		set_motor(2, 40);
+		sleep1(1,0);
+	}
+}
