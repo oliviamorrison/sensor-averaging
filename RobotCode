@@ -11,58 +11,94 @@ int main();
 
   init();
   int quad = 0;
-  //loop forever
-  while(true){
-    if(quad == 0){
+  while(true){  //loop forever
+    if(quad == 0){  //run code for 2nd quadrant
 
-      int numPixels = 32;
+      int numPixels = 32; //takes 32 pixels in a row
       char pix[numPixels];
+      char diffPix[numPixels];
       int numWhitePix = 0;
       double error = 0;
       double diffError = 0;
       
-      take_picture();
+      take_picture(); //take a photo
       
-      for(int k=0; i<numPixels; k++){
-         diffPix[k] = get_pixel(80,k*10, 3);
-        if(diffPix[k]>100){
-         diffPix[k] = k;
+      for(int k=0; i<numPixels; k++){   //takes second scan for differential error in PID
+         diffPix[k] = get_pixel(80,k*10, 3);  //scan pixels in photo at '80' from top
+        if(diffPix[k]>100){   //if individual pixel is white
+         diffPix[k] =  1;    //set value of k'k*10th pixel to 1
           diffError = diffError + (k - numPixels/2);
-      }
+       }
+       else{
+        diffPix[k] = 0;    //if not white, set to 0 for black
+       }
 
       for(int i=0; i<numPixels; i++){
-         pix[i] = get_pixel(120,i*10, 3);
-        if(pix[i]>100){
+         pix[i] = get_pixel(120,i*10, 3); //scan pixels in photo at '120' from top
+        if(pix[i]>100){   
          pix[i] = 1;
           error = error + (i - numPixels/2);
-         numWhitePix++;
+         numWhitePix++;   //count amount of white pixels in the line
+        }
+        else{
+           pix[i] = 0;
+       }
+    
       }
-    else{
-     pix[i] = 0;
+      error = error *-1;    //set negative value on the left of the center
+      double kd = diffError - error;    //set differential value for PID
+      if (numWhitePix > 0){   //if no line is detected
+        set_motor(1, 80 - error + (kd*0.2));  //move wheels in response to P and D in PID
+        set_motor(2, 80 + error - (kd*0.2));
+        printf("error = %d", error);    //print current error value
+        sleep1(0,5000);   //sleep to let the wheels turn
+      }
+      else if(numWhitePix > numPixels/1.6){    //if all pixels in the line are white
+        quad++;   //use code for next quadrant
+        printf("quad = %d", quad);
+      }
+      else{
+        set_motor(1,-20); //reverse with a slight turn
+        set_motor(2,-25);
+      }
     }
 
-    }
-    error = error *-1;
-    double kd = diffError - error;
-    if (numWhitePix > 0){
-    // move wheels with respect to preportional
-      set_motor(1, 80 - error + (kd*0.2));
-      set_motor(2, 80 + error - (kd*0.2));
-      printf("error = %d", error);
-      sleep1(0,5000);
-      set_motor(1, 0);
-      set_motor(2, 0);
-    }
-    else if(numWhitePix == numPixels){
-      quad++;
-      printf("quad = %d", quad);
-    }
-    else{
-      set_motor(1,0);
-      set_motor(2,0);
-    }
-  }
+  } //end of "if quad == 0"
+  
+  
+  else if(quad == 2){
+  
+    int numPixels = 32; //takes 32 pixels in a row
+    char pix[numPixels];
+    char diffPix[numPixels];
+    int numWhitePix = 0;
+    double error = 0;
+    double diffError = 0;
 
+    take_picture(); //take a photo
+
+    for(int k=0; i<numPixels; k++){   //takes second scan for differential error in PID
+       diffPix[k] = get_pixel(80,k*10, 3);  //scan pixels in photo at '80' from top
+      if(diffPix[k]>100){   //if individual pixel is white
+       diffPix[k] =  1;    //set value of k'k*10th pixel to 1
+        diffError = diffError + (k - numPixels/2);
+     }
+     else{
+      diffPix[k] = 0;    //if not white, set to 0 for black
+     }
+
+    for(int i=0; i<numPixels; i++){
+       pix[i] = get_pixel(120,i*10, 3); //scan pixels in photo at '120' from top
+      if(pix[i]>100){   
+       pix[i] = 1;
+        error = error + (i - numPixels/2);
+       numWhitePix++;   //count amount of white pixels in the line
+      }
+      else{
+         pix[i] = 0;
+     }
+
+    }
   }
   return 0;
 }
