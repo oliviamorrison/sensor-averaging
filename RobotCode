@@ -1,0 +1,68 @@
+# include <stdio.h>
+# include <time.h>
+# include "E101.h"
+
+//class robot_Main{
+//int quad = 0;
+//if( quad == 0 ){
+//robot_Main::firstQuad();
+//}
+int main();
+
+  init();
+  int quad = 0;
+  //loop forever
+  while(true){
+    if(quad == 0){
+
+      int numPixels = 32;
+      char pix[numPixels];
+      int numWhitePix = 0;
+      double error = 0;
+      double diffError = 0;
+      
+      take_picture();
+      
+      for(int k=0; i<numPixels; k++){
+         diffPix[k] = get_pixel(80,k*10, 3);
+        if(diffPix[k]>100){
+         diffPix[k] = k;
+          diffError = diffError + (k - numPixels/2);
+      }
+
+      for(int i=0; i<numPixels; i++){
+         pix[i] = get_pixel(120,i*10, 3);
+        if(pix[i]>100){
+         pix[i] = 1;
+          error = error + (i - numPixels/2);
+         numWhitePix++;
+      }
+    else{
+     pix[i] = 0;
+    }
+
+    }
+    error = error *-1;
+    double kd = diffError - error;
+    if (numWhitePix > 0){
+    // move wheels with respect to preportional
+      set_motor(1, 80 - error + (kd*0.2));
+      set_motor(2, 80 + error - (kd*0.2));
+      printf("error = %d", error);
+      sleep1(0,5000);
+      set_motor(1, 0);
+      set_motor(2, 0);
+    }
+    else if(numWhitePix == numPixels){
+      quad++;
+      printf("quad = %d", quad);
+    }
+    else{
+      set_motor(1,0);
+      set_motor(2,0);
+    }
+  }
+
+  }
+  return 0;
+}
