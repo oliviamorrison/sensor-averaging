@@ -1,0 +1,43 @@
+#include <studio.h>
+#include <time.h>
+#include "E101.h"
+
+int main(){
+  init();
+  while(true){{
+    double turningTime = 2;
+    double forwardSpeed = 30;
+    double turnSpeed = 45; 
+    adc_reading = read_analog(0);
+    printf("%d\n", adc_reading);
+    sleep1(0,500000);                 //<---------------may need to remove
+    if(adc_reading > 200){ //max value may need to change
+      setMotor(1,-turnSpeed); //turn speed may need to change
+      setMotor(2,turnSpeed);
+      sleep1(time,0); //turn time may need to change
+      setMotor(1,0);
+      setMotor(2,0);
+      if(adc_reading > 200){
+        setMotor(1,-turnSpeed);
+        setMotor(2,turnSpeed);
+        sleep1(time*2,0);
+        setMotor(1,0);
+        setMotor(2,0);
+      }
+      else{
+        setMotor(1, forwardSpeed);
+        setMotor(2, forwardSpeed);
+        sleep1(0, 5000);
+        setMotor(1,0);
+        setMotor(2,0);
+      }
+    }
+    else{
+        setMotor(1, forwardSpeed);
+        setMotor(2, forwardSpeed);
+        sleep1(0, 5000);
+        setMotor(1,0);
+        setMotor(2,0);  
+    }
+  }
+}
