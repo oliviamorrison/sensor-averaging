@@ -1,10 +1,10 @@
-#include <studio.h>
+#include <stdio.h>
 #include <time.h>
-#include "E101.h"
+//#include "E101.h" //Geany doesn't recognise this line
 
 int main(){
   init();
-  while(true){{
+  while(true){
     double turningTime = 2;
     double forwardSpeed = 30;
     double turnSpeed = 45; 
@@ -14,13 +14,13 @@ int main(){
     if(adc_reading > 200){ //max value may need to change
       setMotor(1,-turnSpeed); //turn speed may need to change
       setMotor(2,turnSpeed);
-      sleep1(time,0); //turn time may need to change
+      sleep1(turningTime,0); //turn time may need to change
       setMotor(1,0);
       setMotor(2,0);
       if(adc_reading > 200){
         setMotor(1,-turnSpeed);
         setMotor(2,turnSpeed);
-        sleep1(time*2,0);
+        sleep1(turningTime*2,0);
         setMotor(1,0);
         setMotor(2,0);
       }
@@ -40,4 +40,5 @@ int main(){
         setMotor(2,0);  
     }
   }
+  return 0;
 }
