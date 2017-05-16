@@ -1,0 +1,113 @@
+# include <stdio.h>
+# include <time.h>
+# include "E101.h"
+
+//class robot_Main{
+//int quad = 0;
+//if( quad == 0 ){
+//robot_Main::firstQuad();
+//}
+int main(){
+	init();
+	int quad = 2;
+	while(true){
+		
+		if(quad == 2){
+
+		  int numPixels = 32;
+		  char pix[numPixels];
+		  char diffPix[numPixels];
+		  int numWhitePix = 0;
+		  double error = 0;
+		  double diffError = 0;
+		  
+		  take_picture();
+		  
+		  for(int k=0; k<numPixels; k++){
+			 diffPix[k] = get_pixel(200,k*10, 3);
+			if(diffPix[k]>100){
+			 diffPix[k] = 1;
+			  diffError = diffError + (k - numPixels/2);
+			}
+		  
+		  else{
+			  diffPix[k] = 0;
+			  }
+		  }
+
+		  for(int i=0; i<numPixels; i++){
+			 pix[i] = get_pixel(120,i*10, 3);
+			if(pix[i]>100){
+				pix[i] = 1;
+				error = error + (i - numPixels/2);
+				numWhitePix++;
+		  }
+			else{
+				pix[i] = 0;
+		}
+
+		}
+		error = error *-1;
+		double kd = diffError - error;
+			if (numWhitePix > 0){
+			  set_motor(1, 80 - error*0.8 + (kd*0.2));
+			  set_motor(2, 80 + error*0.8 - (kd*0.2));
+			  //printf("error = %f", error);
+			  sleep1(0,5000);
+			  set_motor(1, 0);
+			  set_motor(2, 0);
+			}
+			else if(numWhitePix > numPixels/1.9){
+			  //quad++;
+			}
+			else if(numWhitePix == 0){
+			  set_motor(1,-20);
+			  set_motor(2,-50);
+			}
+	  }
+	  
+	  
+	  else if(quad == 3){
+		  
+		  int numPixels = 32;
+		  char pix[numPixels];
+		  char diffPix[numPixels];
+		  //char pix2[numPixels];
+		  int numWhitePix = 0;
+		  double error = 0;
+		  double diffError = 0;
+		  
+		  take_picture();
+		  
+		  for(int k=0; k<numPixels; k++){
+			 diffPix[k] = get_pixel(k*1,160, 3);
+			 //diffPix2[k] = get_pixel(80,k*10, 3);
+			if(diffPix[k]>100){
+			 diffPix[k] = 1;
+			  diffError = diffError + (k - numPixels/2);
+			}
+		  
+		  else{
+			  diffPix[k] = 0;
+			  }
+		  }
+
+		  for(int i=0; i<numPixels; i++){
+			 //pix2[i] = get_pixel(i*7.5,120, 3);//changing y
+			 pix[i] = get_pixel(160,i*10, 3);// changing x
+			 printf("%d= PIXsecnd\n",pix[i]);
+			 
+			if(pix[i]>100){
+			 pix[i] = 1;
+			  error = error + (i - numPixels/2);
+			 numWhitePix++;
+		  }
+			else{
+				pix[i] = 0;
+		  }
+		  
+		}
+	  } //quad 3 end
+	}
+	return 0;
+}
