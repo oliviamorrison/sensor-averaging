@@ -1,18 +1,37 @@
 # include <stdio.h>
 # include <time.h>
 # include "E101.h"
+# include <stdlib.h>
 
-//class robot_Main{
-//int quad = 0;
-//if( quad == 0 ){
-//robot_Main::firstQuad();
-//}
 int main(){
 
     init();
-    int quad = 0;
+    int quad = 1;
     while(true){ //loop forever
-        if(quad == 0){ //run code for 2nd quadrant
+        if(quad == 1){
+        
+            extern "C" int init(int d_lev);
+            extern "C" int connect_to_server( char server_addr[15],int port);
+            extern "C" int send_to_server(char message[24]);
+            extern "C" int receive_from_server(char message[24]);
+            
+            char pass[24];
+            connect_to_server["130.195.6.196", 1024)];
+            send_to_server["Please"];
+            recieve_from_server[pass];
+            send_to_server[pass];
+            if(receive_from_server){
+                quad++;
+            }
+            
+            set_motor(1, -10);
+            set_motor(2, -10);
+            sleep1(0,5000);
+            set_motor(1,0);
+            set_motor(2,0);
+            
+        }
+        if(quad == 2){ //run code for 2nd quadrant
 
             int numPixels = 32; //takes 32 pixels in a row
             char pix[numPixels];
