@@ -1,0 +1,116 @@
+# include <stdio.h>
+# include <time.h>
+# include "E101.h"
+
+//class robot_Main{
+//int quad = 0;
+//if( quad == 0 ){
+//robot_Main::firstQuad();
+//}
+int main(){
+
+    init();
+    int quad = 0;
+    while(true){ //loop forever
+        if(quad == 0){ //run code for 2nd quadrant
+
+            int numPixels = 32; //takes 32 pixels in a row
+            char pix[numPixels];
+            char diffPix[numPixels];
+            int numWhitePix = 0;
+            double error = 0;
+            double diffError = 0;
+
+            take_picture(); //take a photo
+            //display_picture(1,200);
+            for(int k=0; k<numPixels; k++){ //takes second scan for differential error in PID
+                diffPix[k] = get_pixel(200,k*10, 3); //scan pixels in photo at '80' from top
+                //row then col
+                if(diffPix[k]>90){ //if individual pixel is white
+
+                    diffError = diffError + (k - numPixels/2);
+                }
+
+                for(int i=0; i<numPixels; i++){
+                    pix[i] = get_pixel(100,i*10, 3); //scan pixels in photo at '120' from top
+                    if(pix[i]>90){
+                        error = error + (i - numPixels/2);
+                        numWhitePix++; //count amount of white pixels in the line
+                    }
+
+                }
+                error = error *-1; //set negative value on the left of the center
+                double kd = diffError - error; //set differential value for PID
+
+                if(numWhitePix > numPixels/1.6){ //if all pixels in the line are white
+                    //quad++; //use code for next quadrant
+
+                }
+
+                if (numWhitePix > 0){ //if line is detected
+                    if (error > 30 || error < -30){
+                        set_motor(1, -40 - (error*0.6)/3 + (kd*0.1)); //move wheels in response to P and D in PID
+                        set_motor(2, -40 + (error*0.6)/3 - (kd*0.1));//rightmotor
+                        printf("white = %d", quad);
+                        printf("kd = %f, diff = %f, error = %f\n", kd,diffError,error);
+                        sleep1(0,5000); //sleep to let the wheels turn
+
+                        set_motor(1,0);
+                        set_motor(2,0);
+                    }
+                    else{
+                        set_motor(1, -40);
+                        set_motor(2, -40);
+                    }
+                }
+
+                else{
+                    set_motor(1,30); //reverse with a slight turn
+                    set_motor(2,50);
+                    sleep1(0,10000); //sleep to let the wheels turn
+
+                    //set_motor(2,0);
+
+                }
+            }
+
+        } //end of "if quad == 0"
+
+        else if(quad == 2){
+
+            int numPixels = 32; //takes 32 pixels in a row
+            char pix[numPixels];
+            char diffPix[numPixels];
+            int numWhitePix = 0;
+            double error = 0;
+            double diffError = 0;
+
+            take_picture(); //take a photo
+
+            for(int k=0; k<numPixels; k++){ //takes second scan for differential error in PID
+                diffPix[k] = get_pixel(80,k*10, 3); //scan pixels in photo at '80' from top
+                if(diffPix[k]>100){ //if individual pixel is white
+                    diffPix[k] = 1; //set value of k'k*10th pixel to 1
+                    diffError = diffError + (k - numPixels/2);
+                }
+                else{
+                    diffPix[k] = 0; //if not white, set to 0 for black
+                }
+
+                for(int i=0; i<numPixels; i++){
+                    pix[i] = get_pixel(120,i*10, 3); //scan pixels in photo at '120' from top
+                    if(pix[i]>100){
+                        pix[i] = 1;
+                        error = error + (i - numPixels/2);
+                        numWhitePix++; //count amount of white pixels in the line
+                    }
+                    else{
+                        pix[i] = 0;
+                    }
+
+                }
+            }
+            return 0;
+        }
+    }
+}
