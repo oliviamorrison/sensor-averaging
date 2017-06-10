@@ -47,15 +47,15 @@ int main();
       }
       error = error *-1;    //set negative value on the left of the center
       double kd = diffError - error;    //set differential value for PID
-      if (numWhitePix > 0){   //if no line is detected
+      if(numWhitePix > numPixels/1.7){    //if all pixels in the line are white
+        quad++;   //use code for next quadrant
+        printf("quad = %d", quad);
+      }
+      if (numWhitePix > 0){   //if a line is detected
         set_motor(1, 80 - error + (kd*0.2));  //move wheels in response to P and D in PID
         set_motor(2, 80 + error - (kd*0.2));
         printf("error = %d", error);    //print current error value
         sleep1(0,5000);   //sleep to let the wheels turn
-      }
-      else if(numWhitePix > numPixels/1.6){    //if all pixels in the line are white
-        quad++;   //use code for next quadrant
-        printf("quad = %d", quad);
       }
       else{
         set_motor(1,-20); //reverse with a slight turn
